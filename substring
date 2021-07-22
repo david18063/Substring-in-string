@@ -1,0 +1,36 @@
+# include <iostream>
+# include <cstring>
+
+using namespace std;
+
+bool IsStringContains(string s,string sub)
+{
+    string s1 = "";
+    int d = 0;
+
+    if(sub.size() > s.size()) return false;
+
+    for(int i=0;i<s.size();i++)
+    {
+        if(s[i] == sub[0])
+        {
+            while(s[i+d] == sub[d])
+            {
+                s1 += s[i+d];
+                d++;
+                if(d == sub.size() or i+d == s.size()) break;
+            }
+
+            if(s1 == sub) return true;
+            else {d = 0; s1 = "";}
+        }
+    }
+
+    return false;
+}
+
+int main()
+{
+    cout<<IsStringContains("apple","ppl");
+    return 0;
+}
