@@ -1,9 +1,53 @@
-# include <iostream>
-# include <cstring>
+# include "utility.h"
 
-using namespace std;
+vector <int> getCharStartingPositions(string s,string sub)
+{
+    vector <int> v;
 
-bool IsStringContains(string s,string sub)
+    for(int i=0;i<s.size();i++) if(s[i] == sub[0]) v.push_back(i);
+
+    return v;
+}
+
+vector <int> getCharEndingPositions(string s,string sub)
+{
+    vector <int> v;
+
+    for(int i=0;i<s.size();i++) if(s[i] == sub[sub.size()-1]) v.push_back(i);
+
+    return v;
+}
+
+string CutSubstring(string s,int startpos,int endpos)
+{
+    string s1 = "";
+
+    for(int i=startpos;i<=endpos;i++) s1 += s[i];
+
+    return s1;
+}
+
+vector <string> getAllConsecutiveSubstringsOfLength(string s,int length)
+{
+    int d = 0;
+    string s1 = "";
+    vector <string> v;
+
+    while(d + length <= s.size())
+    {
+        s1 = "";
+
+        for(int i=d;i<d+length;i++) s1 += s[i];
+
+        v.push_back(s1);
+
+        d++;
+    }
+
+    return v;
+}
+
+bool IsStringContainsSubstring1(string s,string sub)
 {
     string s1 = "";
     int d = 0;
@@ -29,8 +73,35 @@ bool IsStringContains(string s,string sub)
     return false;
 }
 
+bool IsStringContainsSubstring2(string s,string sub)
+{
+    for(int i=0;i<getAllConsecutiveSubstringsOfLength(s,sub.size()).size();i++)
+    {
+        if(getAllConsecutiveSubstringsOfLength(s,sub.size())[i] == sub) return true;
+    }
+
+    return false;
+}
+
+bool IsStringContainsSubstring3(string s,string sub)
+{
+    for(int i=0;i<getCharStartingPositions(s,sub).size();i++)
+    {
+        for(int j=0;j<getCharEndingPositions(s,sub).size();j++)
+        {
+            if(CutSubstring(s,getCharStartingPositions(s,sub)[i],getCharEndingPositions(s,sub)[j]) == sub) return true;
+        }
+    }
+
+    return false;
+}
+
 int main()
 {
-    cout<<IsStringContains("apple","ppl");
+    cout<<IsStringContainsSubstring1("I like apples and oranges.","apple")<<endl;
+    cout<<IsStringContainsSubstring2("I like apples and oranges.","apple")<<endl;
+    cout<<IsStringContainsSubstring3("I like apples and oranges.","apple")<<endl;
+
     return 0;
 }
+
